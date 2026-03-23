@@ -13,9 +13,12 @@ const { errorHandler } = require('./src/utils/errorHandler');
 const { generalLimiter } = require('./src/middleware/rateLimiter.middleware');
 const connectDB = require('./src/config/db');
 
-const authRoutes = require('./src/routes/auth.routes');
-const providerRoutes = require('./src/routes/provider.routes');
+const authRoutes      = require('./src/routes/auth.routes');
+const providerRoutes  = require('./src/routes/provider.routes');
+const paymentRoutes   = require('./src/routes/payment.routes');
+const dashboardRoutes = require('./src/routes/dashboard.routes');
 const { startStripeSyncJob } = require('./src/jobs/stripeSync.job');
+require('./src/jobs/tebraSync.job');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,8 +29,10 @@ app.use(cors());
 app.use(express.json());
 app.use(generalLimiter);
 
-app.use('/api/auth', authRoutes);
+app.use('/api/auth',      authRoutes);
 app.use('/api/providers', providerRoutes);
+app.use('/api/payments',  paymentRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
