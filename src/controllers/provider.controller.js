@@ -2,7 +2,6 @@
 
 const { validationResult } = require('express-validator');
 const Provider = require('../models/Provider');
-const Transaction = require('../models/Transaction');
 const stripeService = require('../services/stripeService');
 const { success, error } = require('../utils/apiResponse');
 const logger = require('../utils/logger');
@@ -30,12 +29,7 @@ const getProvider = async (req, res) => {
   try {
     const provider = await Provider.findById(req.params.id);
     if (!provider) return error(res, 'Provider not found', 404);
-
-    const transactions = await Transaction.find({ provider_id: provider._id })
-      .sort({ createdAt: -1 })
-      .limit(50);
-
-    return success(res, { provider, transactions });
+    return success(res, { provider });
   } catch (err) {
     logger.error('getProvider error', { error: err.message });
     return error(res, 'Failed to fetch provider', 500, err.message);
