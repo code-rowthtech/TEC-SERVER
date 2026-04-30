@@ -6,7 +6,7 @@ const stripeService = require('../services/stripeService');
 const logger = require('../utils/logger');
 const { ONBOARDING_STATUS } = require('../utils/constants');
 
-const CRON_SCHEDULE = process.env.STRIPE_SYNC_CRON || '* * * * *';
+const CRON_SCHEDULE = process.env.STRIPE_SYNC_CRON || '*/10 * * * *';
 
 const runStripeSync = async () => {
   const providers = await Provider.find({
